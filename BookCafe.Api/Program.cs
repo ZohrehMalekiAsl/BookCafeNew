@@ -1,12 +1,11 @@
 using BookCafe.Application.CQRS.Authors.Commands;
+using BookCafe.Application.Interfaces;
 using BookCafe.Domain.Repositories;
 using BookCafe.Infrastructure.Context;
+using BookCafe.Infrastructure.Repositories;
 using BookCafe.Infrastructure.Repository;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Proxies;
-
-using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,9 +18,10 @@ builder.Services.AddDbContext<ApplicationDbContext>
     .UseLazyLoadingProxies());
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IGeneralRepository, AuthorRepository>();
+builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 builder.Services.AddScoped<IMediator, Mediator>();
-builder.Services.AddMediatR(x=>x.RegisterServicesFromAssembly(typeof(AddAuthorCommand).Assembly));
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddMediatR(x => x.RegisterServicesFromAssembly(typeof(AddAuthorCommand).Assembly));
 
 var app = builder.Build();
 

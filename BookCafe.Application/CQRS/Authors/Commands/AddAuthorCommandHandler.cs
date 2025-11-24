@@ -6,17 +6,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BookCafe.Application.Interfaces;
 
 namespace BookCafe.Application.CQRS.Authors.Commands
 {
-    public class AddAuthorCommandHandler : IRequestHandler<AddAuthorCommand, Guid>
+    public class AddAuthorCommandHandler(IAuthorRepository repository, IUnitOfWork unitOfWork) : IRequestHandler<AddAuthorCommand, Guid>
     {
-        private readonly IGeneralRepository _repository;
-
-        public AddAuthorCommandHandler(IGeneralRepository repository)
-        {
-            _repository = repository;
-        }
 
         public async Task<Guid> Handle(AddAuthorCommand request, CancellationToken cancellationToken)
         {
@@ -27,7 +22,8 @@ namespace BookCafe.Application.CQRS.Authors.Commands
                 FirstName = request.FirstName,
                 LastName = request.LastName
             };
-            await _repository.AddAsync(author);
+            repository.Add(author);
+            var result= await unitOfWork.AysncSave();
             return author.Id;
 
         }
