@@ -11,9 +11,9 @@ namespace BookCafe.Application.CQRS.Authors.Commands
 {
     public class AddAuthorCommandHandler : IRequestHandler<AddAuthorCommand, Guid>
     {
-        private readonly IRepository _repository;
+        private readonly IGeneralRepository _repository;
 
-        public AddAuthorCommandHandler(IRepository repository)
+        public AddAuthorCommandHandler(IGeneralRepository repository)
         {
             _repository = repository;
         }

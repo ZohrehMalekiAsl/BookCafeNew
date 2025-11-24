@@ -19,7 +19,7 @@ builder.Services.AddDbContext<ApplicationDbContext>
     .UseLazyLoadingProxies());
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IRepository, AuthorRepository>();
+builder.Services.AddScoped<IGeneralRepository, AuthorRepository>();
 builder.Services.AddScoped<IMediator, Mediator>();
 builder.Services.AddMediatR(x=>x.RegisterServicesFromAssembly(typeof(AddAuthorCommand).Assembly));
 

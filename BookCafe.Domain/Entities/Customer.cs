@@ -1,6 +1,6 @@
 ﻿namespace BookCafe.Domain.Entities
 {
-    public class Customer
+    public class Customer: IEntity
     {
         public Guid Id { get; set; }
         public string FirstName { get; set; }
