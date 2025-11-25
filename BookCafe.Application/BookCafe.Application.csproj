@@ -7,13 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Contracts\Services\**" />
-    <EmbeddedResource Remove="Contracts\Services\**" />
-    <None Remove="Contracts\Services\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Contracts\" />
     <Folder Include="CQRS\Authors\Queries\" />
   </ItemGroup>
 
