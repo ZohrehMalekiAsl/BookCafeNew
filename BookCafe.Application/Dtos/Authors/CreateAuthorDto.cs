@@ -8,7 +8,7 @@ namespace BookCafe.Application.Dtos.Author
 {
     public class CreateAuthorDto
     {
-        public string FirstName { get; set; }
+        public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public DateTime? BirthDate { get; set; }
         public string? Nationality { get; set; }
