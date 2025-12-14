@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BookCafe.Application.Interfaces;
+using BookCafe.Application.Interfaces.Infra;
 
 namespace BookCafe.Application.CQRS.Authors.Commands
 {

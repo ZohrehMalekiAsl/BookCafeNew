@@ -1,5 +1,8 @@
 ﻿using BookCafe.Application.CQRS.Authors.Commands;
+using BookCafe.Application.CQRS.Authors.Queries;
 using BookCafe.Application.Dtos.Author;
+using BookCafe.Application.Dtos.Authors;
+using BookCafe.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -55,6 +58,19 @@ namespace BookCafe.Api.Controllers
             {
                 return BadRequest("Author creation failed.");
             }
+        }
+
+        [HttpGet(Name ="GetAuthor")]
+        public async Task<IActionResult> GetAuthor([FromQuery] AuthorDto author)
+        {
+            var query = new GetAuthorQuery
+            {
+                FirstName = author.FirstName,
+                LastName = author.LastName,
+                Nationality = author.Nationality
+            };
+            var result = _mediator.Send(query);
+            return Ok(result.Result);
         }
     }
 }

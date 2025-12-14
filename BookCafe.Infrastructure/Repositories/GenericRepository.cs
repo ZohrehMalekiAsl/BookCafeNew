@@ -23,10 +23,11 @@ namespace BookCafe.Infrastructure.Repositories
         {
             dbContext.Remove(entity);
         }
-        public async Task<T> GetByIdAsync<T>(Guid guid)
-        {
-            var result= dbContext.FindAsync(guid);
-            return result;
-        }
+        //public async Task<T> GetByIdAsync<T>(Guid guid)
+        //{
+        //    var result = dbContext.FindAsync(guid);
+        //    return result;
+        //}
+       
     }
 }

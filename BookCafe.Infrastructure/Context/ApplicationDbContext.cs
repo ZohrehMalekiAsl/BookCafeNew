@@ -1,17 +1,16 @@
 ﻿using BookCafe.Domain.Entities;
 using BookCafe.Infrastructure.Config;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BookCafe.Infrastructure.Context
 {
     public class ApplicationDbContext : DbContext
     {
+        public DbSet<Author> Author { get; set; }
+        public DbSet<Book> Book { get; set; }
+        public DbSet<Customer> Customer { get; set; }
+        public DbSet<User> User { get; set; }
+        public DbSet<RefreshToken> refreshTokens { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
@@ -20,8 +19,10 @@ namespace BookCafe.Infrastructure.Context
             builder.Entity<Book>();
             builder.Entity<Customer>();
             builder.Entity<Author>();
+            builder.Entity<User>();
+            builder.Entity<RefreshToken>();
             builder.ApplyConfigurationsFromAssembly(typeof(BookConfig).Assembly);
 
-        }        
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using BookCafe.Application.Interfaces;
+﻿using BookCafe.Application.Interfaces.Infra;
 using BookCafe.Infrastructure.Context;
 using System;
 using System.Collections.Generic;

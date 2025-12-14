@@ -1,4 +1,4 @@
-﻿using BookCafe.Application.Interfaces;
+﻿using BookCafe.Application.Interfaces.Infra;
 using BookCafe.Domain.Entities;
 using BookCafe.Domain.Repositories;
 using MediatR;
