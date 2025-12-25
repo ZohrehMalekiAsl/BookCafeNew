@@ -1,27 +1,18 @@
 ﻿using BookCafe.Application.Interfaces.Infra;
+using BookCafe.Infrastructure;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace BookCafe.Infrastructure
+public class AppSettingsProvider : IAppSetting
 {
-    public class AppSettingsProvider : IAppSetting
+    private readonly IOptionsMonitor<AppSetting> _options;
+
+    public AppSettingsProvider(IOptionsMonitor<AppSetting> options)
     {
-        private readonly IOptionsMonitor<AppSetting> _optionsMonitor;
-
-        public AppSettingsProvider(IOptionsMonitor<AppSetting> optionsMonitor)
-        {
-            _optionsMonitor = optionsMonitor;
-        }
-        public string ConnectionStrings => _optionsMonitor.CurrentValue.ConnectionStrings;
-
-        public string SecretKey => _optionsMonitor.CurrentValue.SecretKey;
-
-        public string Issuer => _optionsMonitor.CurrentValue.Issuer;
-
-        public string Audience => _optionsMonitor.CurrentValue.Audience;
+        _options = options;
     }
+
+    public string DefaultConnection => _options.CurrentValue.ConnectionStrings.DefaultConnection;
+    public string SecretKey => _options.CurrentValue.JwtSettings.SecretKey;
+    public string Issuer => _options.CurrentValue.JwtSettings.Issuer;
+    public string Audience => _options.CurrentValue.JwtSettings.Audience;
 }

@@ -7,25 +7,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BookCafe.Application.Interfaces.Infra;
+using BookCafe.Application.Interfaces.Services;
 
 namespace BookCafe.Application.CQRS.Authors.Commands
 {
-    public class AddAuthorCommandHandler(IAuthorRepository repository, IUnitOfWork unitOfWork) : IRequestHandler<AddAuthorCommand, Guid>
+    public class AddAuthorCommandHandler : IRequestHandler<AddAuthorCommand, Guid>
     {
+        private readonly IAuthorService _authorService;
 
-        public async Task<Guid> Handle(AddAuthorCommand request, CancellationToken cancellationToken)
+        public AddAuthorCommandHandler(IAuthorService authorService)
         {
-            var author = new Author
-            {
-                BirthDate = request.BirthDate,
-                Nationality = request.Nationality,
-                FirstName = request.FirstName,
-                LastName = request.LastName
-            };
-            repository.Add(author);
-            var result= await unitOfWork.AysncSave();
-            return author.Id;
-
+            _authorService = authorService;
+        }
+        public async Task<Guid> Handle(AddAuthorCommand author, CancellationToken cancellationToken)
+        {
+            return await _authorService.AddAuthor(author);
         }
     }
 }

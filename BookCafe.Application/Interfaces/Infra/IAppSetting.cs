@@ -8,7 +8,7 @@ namespace BookCafe.Application.Interfaces.Infra
 {
     public interface IAppSetting
     {
-        string ConnectionStrings { get; }
+        string DefaultConnection { get; }
         string SecretKey { get; }
         string Issuer { get; }
         string Audience { get; }

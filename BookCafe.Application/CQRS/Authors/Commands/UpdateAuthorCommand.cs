@@ -9,6 +9,7 @@ namespace BookCafe.Application.CQRS.Authors.Commands
 {
     public class UpdateAuthorCommand: IRequest<bool>
     {
+        public Guid Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime? BirthDate { get; set; }

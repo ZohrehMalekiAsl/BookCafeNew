@@ -18,9 +18,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddDbContext<ApplicationDbContext>
-    (option => option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
-    .UseLazyLoadingProxies());
+builder.Services.AddDbContext<ApplicationDbContext>((sp, options) =>
+{
+    var settings = sp.GetRequiredService<IAppSetting>();
+    options.UseSqlServer(settings.DefaultConnection)
+           .UseLazyLoadingProxies();
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
@@ -29,7 +33,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IAuthorService, AuthorService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IAppSetting, AppSettingsProvider>();
+builder.Services.AddSingleton<IAppSetting, AppSettingsProvider>();
 builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("Settings"));
 
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssembly(typeof(AddAuthorCommand).Assembly));

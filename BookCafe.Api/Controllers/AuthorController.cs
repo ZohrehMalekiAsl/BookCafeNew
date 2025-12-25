@@ -47,12 +47,13 @@ namespace BookCafe.Api.Controllers
                 BirthDate = author.BirthDate,
                 FirstName = author.FirstName,
                 LastName = author.LastName,
-                Nationality = author.Nationality
+                Nationality = author.Nationality,
+                Id=author.Id
             };
             var result = await _mediator.Send(command);
             if (result != null)
             {
-                return Ok();
+                return Ok(result);
             }
             else
             {
