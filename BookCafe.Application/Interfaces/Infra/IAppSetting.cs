@@ -12,5 +12,7 @@ namespace BookCafe.Application.Interfaces.Infra
         string SecretKey { get; }
         string Issuer { get; }
         string Audience { get; }
+         string AccessTokenMinutes { get;  }
+         string RefreshTokenDays { get;  }
     }
 }

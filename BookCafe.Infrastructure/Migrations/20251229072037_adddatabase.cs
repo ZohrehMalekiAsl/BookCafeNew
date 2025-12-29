@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BookCafe.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class adddatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,7 +18,8 @@ namespace BookCafe.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    BirthDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Nationality = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -34,11 +35,29 @@ namespace BookCafe.Infrastructure.Migrations
                     LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     NationalId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(254)", maxLength: 254, nullable: false),
-                    CellPhone = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false)
+                    CellPhone = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
+                    Address_City = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Address_Street = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    Address_Plaque = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Customer", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "User",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserName = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    TokenVersion = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_User", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -59,6 +78,29 @@ namespace BookCafe.Infrastructure.Migrations
                         column: x => x.AuthorId,
                         principalTable: "Author",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "refreshTokens",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ExpiresAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsRevoked = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_refreshTokens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_refreshTokens_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -94,6 +136,17 @@ namespace BookCafe.Infrastructure.Migrations
                 name: "IX_Book_AuthorId",
                 table: "Book",
                 column: "AuthorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_refreshTokens_UserId",
+                table: "refreshTokens",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_UserName",
+                table: "User",
+                column: "UserName",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -106,7 +159,13 @@ namespace BookCafe.Infrastructure.Migrations
                 name: "Customer");
 
             migrationBuilder.DropTable(
+                name: "refreshTokens");
+
+            migrationBuilder.DropTable(
                 name: "Book");
+
+            migrationBuilder.DropTable(
+                name: "User");
 
             migrationBuilder.DropTable(
                 name: "Author");

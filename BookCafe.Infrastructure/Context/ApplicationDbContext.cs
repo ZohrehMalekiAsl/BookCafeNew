@@ -1,6 +1,7 @@
 ﻿using BookCafe.Domain.Entities;
 using BookCafe.Infrastructure.Config;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BookCafe.Infrastructure.Context
 {
@@ -19,10 +20,9 @@ namespace BookCafe.Infrastructure.Context
             builder.Entity<Book>();
             builder.Entity<Customer>();
             builder.Entity<Author>();
-            builder.Entity<User>();
+            builder.Entity<User>().HasIndex(u => u.UserName).IsUnique(); 
             builder.Entity<RefreshToken>();
             builder.ApplyConfigurationsFromAssembly(typeof(BookConfig).Assembly);
-
         }
     }
 }

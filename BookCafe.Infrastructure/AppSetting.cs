@@ -23,5 +23,7 @@ namespace BookCafe.Infrastructure
         public string SecretKey { get; set; }
         public string Issuer { get; set; }
         public string Audience { get; set; }
+        public string AccessTokenMinutes { get; set; }
+        public string RefreshTokenDays { get; set; }
     }
 }

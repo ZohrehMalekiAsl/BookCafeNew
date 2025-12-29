@@ -185,6 +185,9 @@ namespace BookCafe.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserName")
+                        .IsUnique();
+
                     b.ToTable("User");
                 });
 

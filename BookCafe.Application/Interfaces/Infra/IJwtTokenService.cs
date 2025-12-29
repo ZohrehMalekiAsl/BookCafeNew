@@ -1,15 +1,12 @@
 ﻿using BookCafe.Application.CQRS.Token.Commands;
 using BookCafe.Application.Dtos.Login;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using BookCafe.Domain.Entities;
 
 namespace BookCafe.Application.Interfaces.Infra
 {
     public interface IJwtTokenService
     {
-        Task<LoginResponseDto> GetToken(GenerateTokenCommand command);
+        Task<LoginResponseDto> GenerateAccessToken(User user);
+        Task<LoginResponseDto> GenerateRefreshToken(GenerateTokenCommand command);
     }
 }

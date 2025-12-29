@@ -17,7 +17,7 @@ namespace BookCafe.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetToken(LoginRequestDto requestDto)
+        public async Task<IActionResult> GetAccessToken(LoginRequestDto requestDto)
         {
             var command = new GenerateTokenCommand
             {
@@ -31,7 +31,7 @@ namespace BookCafe.Api.Controllers
             }
             else
             {
-                return BadRequest("Author creation failed.");
+                return Unauthorized(new { message = "Invalid username or password" });
             }
         }
     }

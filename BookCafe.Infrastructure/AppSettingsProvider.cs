@@ -15,4 +15,6 @@ public class AppSettingsProvider : IAppSetting
     public string SecretKey => _options.CurrentValue.JwtSettings.SecretKey;
     public string Issuer => _options.CurrentValue.JwtSettings.Issuer;
     public string Audience => _options.CurrentValue.JwtSettings.Audience;
+    public string AccessTokenMinutes => _options.CurrentValue.JwtSettings.AccessTokenMinutes;
+    public string RefreshTokenDays => _options.CurrentValue.JwtSettings.RefreshTokenDays;
 }
