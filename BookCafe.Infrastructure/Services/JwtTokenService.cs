@@ -21,10 +21,7 @@ namespace BookCafe.Infrastructure.Services
         
             _appSetting = appSetting;
         }
-
-
-
-        public Task<LoginResponseDto> GenerateAccessToken(User user)
+        public Task<string> GenerateAccessToken(User user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSetting.SecretKey));
             var credential = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -41,30 +38,27 @@ namespace BookCafe.Infrastructure.Services
                 );
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-            var response = new LoginResponseDto
-            {
-                ExpiresAt = token.ValidTo,
-                AccessToken = jwt
-            };
-            return Task.FromResult(response);
+      
+            return Task.FromResult(jwt);
         }
-        public Task<LoginResponseDto> GenerateRefreshToken(GenerateTokenCommand command)
+        public Task<RefreshToken> GenerateRefreshToken(int userId)
         {
           
             var days = double.Parse(_appSetting.RefreshTokenDays);
 
             var randomBytes = RandomNumberGenerator.GetBytes(64);
             var token = Convert.ToBase64String(randomBytes);
-            var g = new LoginResponseDto();
-            return Task.FromResult(g);
-            //{
-            //    UserId = 
-            //    Token = token,
-            //    CreateAt = DateTime.UtcNow,
-            //    ExpiresAt = DateTime.UtcNow.AddDays(days),
-            //    IsRevoked = false
-            //};
 
+            var refreshToken = new RefreshToken
+            {
+                UserId = userId,
+                Token = token,
+                CreateAt = DateTime.UtcNow,
+                ExpiresAt = DateTime.UtcNow.AddDays(days),
+                IsRevoked = false
+            };
+            
+            return Task.FromResult(refreshToken );
         }
     }
 }

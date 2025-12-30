@@ -1,4 +1,6 @@
-﻿using BookCafe.Application.Dtos.Login;
+﻿using Azure;
+using BookCafe.Application.CQRS.Token.Commands;
+using BookCafe.Application.Dtos.Login;
 using BookCafe.Application.Interfaces.Infra;
 
 namespace BookCafe.Infrastructure.Services
@@ -13,14 +15,14 @@ namespace BookCafe.Infrastructure.Services
             _userService = userService;
             _jwtTokenService = jwtTokenService;
         }
-        public async Task<LoginResponseDto> IsAuthenticated(LoginRequestDto loginRequest)
+        public async Task<LoginResponseDto> IsAuthenticated(GenerateTokenCommand request)
         {
-            var user = await _userService.GetUserByUsername(loginRequest.UserName);
+            var user = await _userService.GetUserByUsername(request.UserName);
             if (user == null)
             {
                 return new LoginResponseDto();
             }
-            var result = _userService.ValidatePassword(user, loginRequest.Password);
+            var result = _userService.ValidatePassword(user, request.Password);
 
             if (result == null || result.Result != true)
             {
@@ -34,7 +36,22 @@ namespace BookCafe.Infrastructure.Services
             }
             else
             {
-                return jwt.Result;
+                var refToken= _jwtTokenService.GenerateRefreshToken(user.Id);
+                if (refToken == null)
+                {
+                    return new LoginResponseDto();
+                }
+                else
+                {
+                    var response = new LoginResponseDto
+                    {
+                        AccessToken = jwt.Result,
+                        ExpiresAt = refToken.Result.ExpiresAt,
+                        RefreshToken=refToken.Result.Token
+                    };
+                    return response;
+                }
+               
             }
         }
     }

@@ -22,6 +22,11 @@ namespace BookCafe.Infrastructure.Services
             return await _repository.GetUser(username);
         }
 
+        public async Task<bool> SaveRefreshToken(User user)
+        {
+            return await _repository.SaveRefreshToken(user);
+        }
+
         public Task<bool> ValidatePassword(User user, string password)
         {
             if (user.PasswordHash != password) 

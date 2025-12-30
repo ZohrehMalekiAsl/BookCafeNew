@@ -19,8 +19,7 @@ namespace BookCafe.Infrastructure.Repositories
 
         public async Task<int> AysncSave()
         {
-            var result = await _dbContext.SaveChangesAsync();
-            return result;
+           return await _dbContext.SaveChangesAsync();
         }
     }
 }

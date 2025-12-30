@@ -1,4 +1,5 @@
 using AutoMapper;
+using Azure.Core;
 using BookCafe.Application.CQRS.Authors.Commands;
 using BookCafe.Application.Interfaces.Infra;
 using BookCafe.Application.Interfaces.Services;
@@ -29,10 +30,13 @@ builder.Services.AddDbContext<ApplicationDbContext>((sp, options) =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IMediator, Mediator>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IAuthorService, AuthorService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddSingleton<IAppSetting, AppSettingsProvider>();
 builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("Settings"));

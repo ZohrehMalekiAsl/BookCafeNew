@@ -6,7 +6,7 @@ namespace BookCafe.Application.Interfaces.Infra
 {
     public interface IJwtTokenService
     {
-        Task<LoginResponseDto> GenerateAccessToken(User user);
-        Task<LoginResponseDto> GenerateRefreshToken(GenerateTokenCommand command);
+        Task<string> GenerateAccessToken(User user);
+        Task<RefreshToken> GenerateRefreshToken(int userId);
     }
 }

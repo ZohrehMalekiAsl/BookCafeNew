@@ -1,4 +1,5 @@
-﻿using BookCafe.Application.Dtos.Login;
+﻿using BookCafe.Application.CQRS.Token.Commands;
+using BookCafe.Application.Dtos.Login;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace BookCafe.Application.Interfaces.Infra
 {
     public interface IAuthService
     {
-        Task<LoginResponseDto> IsAuthenticated (LoginRequestDto loginRequest);
+        Task<LoginResponseDto> IsAuthenticated (GenerateTokenCommand request);
     }
 }

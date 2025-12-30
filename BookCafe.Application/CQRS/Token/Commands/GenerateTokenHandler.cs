@@ -12,16 +12,16 @@ namespace BookCafe.Application.CQRS.Token.Commands
 {
     public class GenerateTokenHandler : IRequestHandler<GenerateTokenCommand, LoginResponseDto>
     {
-        private readonly IJwtTokenService _jwtTokenService;
+        private readonly IAuthService _authservice;
 
-        public GenerateTokenHandler(IJwtTokenService jwtTokenService)
+        public GenerateTokenHandler(IAuthService authservice)
         {
-            _jwtTokenService = jwtTokenService;
+             _authservice= authservice;
         }
 
         public async Task<LoginResponseDto> Handle(GenerateTokenCommand request, CancellationToken cancellationToken)
         {
-            return await _jwtTokenService.GetToken(request);
+            return await  _authservice.IsAuthenticated(request);
         }
     }
 }
