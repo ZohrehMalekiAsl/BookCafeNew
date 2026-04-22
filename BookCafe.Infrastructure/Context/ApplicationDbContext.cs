@@ -11,7 +11,7 @@ namespace BookCafe.Infrastructure.Context
         public DbSet<Book> Book { get; set; }
         public DbSet<Customer> Customer { get; set; }
         public DbSet<User> User { get; set; }
-        public DbSet<RefreshToken> refreshTokens { get; set; }
+        public DbSet<RefreshToken> RefreshToken { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
@@ -21,7 +21,7 @@ namespace BookCafe.Infrastructure.Context
             builder.Entity<Customer>();
             builder.Entity<Author>();
             builder.Entity<User>().HasIndex(u => u.UserName).IsUnique(); 
-            builder.Entity<RefreshToken>();
+            builder.Entity<RefreshToken>().HasIndex(u => u.Token).IsUnique(); 
             builder.ApplyConfigurationsFromAssembly(typeof(BookConfig).Assembly);
         }
     }

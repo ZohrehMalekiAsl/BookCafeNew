@@ -10,6 +10,7 @@ namespace BookCafe.Domain.Repositories
     public interface IUserRepository
     {
         Task<User> GetUser(string  username);
+        Task<bool> AddUser(User  user);
         Task<bool> SaveRefreshToken(User user);
     }
 }

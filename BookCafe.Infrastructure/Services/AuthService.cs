@@ -2,6 +2,7 @@
 using BookCafe.Application.CQRS.Token.Commands;
 using BookCafe.Application.Dtos.Login;
 using BookCafe.Application.Interfaces.Infra;
+using BookCafe.Domain.Entities;
 
 namespace BookCafe.Infrastructure.Services
 {
@@ -43,6 +44,16 @@ namespace BookCafe.Infrastructure.Services
                 }
                 else
                 {
+                    var refreshToken = new RefreshToken
+                    {
+                        CreateAt = refToken.Result.CreateAt,
+                            ExpiresAt = refToken.Result.ExpiresAt,
+                            Id = refToken.Result.Id,
+                            Token=refToken.Result.Token,
+                            IsRevoked = refToken.Result.IsRevoked,
+                            UserId = user.Id,                            
+                    };
+                    var user2 = await _userService.SaveRefreshToken(user);
                     var response = new LoginResponseDto
                     {
                         AccessToken = jwt.Result,

@@ -16,7 +16,7 @@ namespace BookCafe.Api.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost]
+        [HttpPost("GetAccessToken")]
         public async Task<IActionResult> GetAccessToken(LoginRequestDto requestDto)
         {
             var command = new GenerateTokenCommand

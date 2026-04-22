@@ -4,8 +4,12 @@ using BookCafe.Application.CQRS.Authors.Queries;
 using BookCafe.Application.Dtos.Authors;
 using BookCafe.Application.Interfaces.Infra;
 using BookCafe.Application.Interfaces.Services;
+using BookCafe.Domain;
 using BookCafe.Domain.Entities;
 using BookCafe.Domain.Repositories;
+using MediatR.Wrappers;
+using Microsoft.Extensions.Logging;
+using System.Reflection.PortableExecutable;
 
 namespace BookCafe.Application.Services
 {
@@ -13,13 +17,12 @@ namespace BookCafe.Application.Services
     {
         private readonly IAuthorRepository _repository;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-
-        public AuthorService(IAuthorRepository repository, IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly ILogService<AuthorService> _logger;
+        public AuthorService(IAuthorRepository repository, IUnitOfWork unitOfWork, ILogService<AuthorService> logger)
         {
             _repository = repository;
             _unitOfWork = unitOfWork;
-            _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<Guid> AddAuthor(AddAuthorCommand request)
@@ -31,8 +34,18 @@ namespace BookCafe.Application.Services
                 FirstName = request.FirstName,
                 LastName = request.LastName
             };
+     
             _repository.Add(author);
+       
             var result = await _unitOfWork.AysncSave();
+            var logData = new LogData<AddAuthorCommand,Guid>
+            {
+                CorrelationId = author.Id.ToString(),
+                ElapsedMilliseconds = DateTime.Now.Microsecond,
+                RequestInfo = request
+            };
+
+            _logger.LogData<AddAuthorCommand,Guid>(LogLevel.Information, logData);
             return author.Id;
         }
 

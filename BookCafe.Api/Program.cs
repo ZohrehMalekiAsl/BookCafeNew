@@ -1,9 +1,8 @@
-using AutoMapper;
-using Azure.Core;
 using BookCafe.Application.CQRS.Authors.Commands;
 using BookCafe.Application.Interfaces.Infra;
 using BookCafe.Application.Interfaces.Services;
 using BookCafe.Application.Services;
+using BookCafe.Domain;
 using BookCafe.Domain.Repositories;
 using BookCafe.Infrastructure;
 using BookCafe.Infrastructure.Context;
@@ -12,15 +11,30 @@ using BookCafe.Infrastructure.Repository;
 using BookCafe.Infrastructure.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+using Serilog;
+using Serilog.Formatting.Compact;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
+
+builder.Host.UseSerilog();
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .Filter.ByIncludingOnly(e =>
+    e.Properties.ContainsKey("SourceContext") &&
+    e.Properties["SourceContext"].ToString().Contains("LogService"))  
+
+    .WriteTo.File(new RenderedCompactJsonFormatter(),      
+        path: "logs/BookCafe-.txt", 
+        rollingInterval: RollingInterval.Day 
+          )
+    .CreateLogger();
+
+
+// Add services to the container.
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddDbContext<ApplicationDbContext>((sp, options) =>
+builder.Services.AddDbContextPool<ApplicationDbContext>((sp, options) =>
 {
     var settings = sp.GetRequiredService<IAppSetting>();
     options.UseSqlServer(settings.DefaultConnection)
@@ -34,11 +48,15 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IMediator, Mediator>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IAuthorService, AuthorService>();
+builder.Services.AddScoped<IBookService, GetBookServices>();
+builder.Services.AddScoped<IBookService, SpecificBookServices>();
+//builder.Services.AddKeyedScoped<IBookService, SpecificBookServices>("A");
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddSingleton<IAppSetting, AppSettingsProvider>();
+builder.Services.AddScoped(typeof(ILogService<>), typeof(LogService<>));
 builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("Settings"));
 
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssembly(typeof(AddAuthorCommand).Assembly));

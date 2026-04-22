@@ -9,7 +9,8 @@ namespace BookCafe.Domain.Repositories
 {
     public interface IRefreshTokenRepository
     {
-       void Add(RefreshToken token);
+        void Add(RefreshToken token);
+        void Update(RefreshToken token);
         Task<RefreshToken> GetByTokenAsync(string token);
     }
 }

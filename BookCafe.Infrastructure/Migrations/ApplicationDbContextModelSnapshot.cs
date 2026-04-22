@@ -150,16 +150,19 @@ namespace BookCafe.Infrastructure.Migrations
 
                     b.Property<string>("Token")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Token")
+                        .IsUnique();
+
                     b.HasIndex("UserId");
 
-                    b.ToTable("refreshTokens");
+                    b.ToTable("RefreshToken");
                 });
 
             modelBuilder.Entity("BookCafe.Domain.Entities.User", b =>

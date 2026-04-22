@@ -19,7 +19,7 @@ namespace BookCafe.Api.Controllers
         {
             _mediator = mediator;
         }
-        [HttpPost(Name = "AddAuthor")]
+        [HttpPost("AddAuthor")]
         public async Task<IActionResult> AddAuthor(CreateAuthorDto author)
         {
             var command = new AddAuthorCommand
@@ -39,7 +39,7 @@ namespace BookCafe.Api.Controllers
                 return BadRequest("Author creation failed.");
             }
         }
-        [HttpPut(Name = "AddAuthor")]
+        [HttpPut("UpdateAuthor")]
         public async Task<IActionResult> UpdateAuthor(UpdateAuthorDto author)
         {
             var command = new UpdateAuthorCommand
@@ -61,7 +61,7 @@ namespace BookCafe.Api.Controllers
             }
         }
 
-        [HttpGet(Name ="GetAuthor")]
+        [HttpGet("GetAuthor")]
         public async Task<IActionResult> GetAuthor([FromQuery] AuthorDto author)
         {
             var query = new GetAuthorQuery
@@ -70,8 +70,8 @@ namespace BookCafe.Api.Controllers
                 LastName = author.LastName,
                 Nationality = author.Nationality
             };
-            var result = _mediator.Send(query);
-            return Ok(result.Result);
+            var result = await _mediator.Send(query);
+            return Ok(result);
         }
     }
 }

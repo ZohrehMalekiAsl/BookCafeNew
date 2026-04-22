@@ -16,4 +16,8 @@
     <ProjectReference Include="..\BookCafe.Domain\BookCafe.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="CQRS\User\Commands\" />
+  </ItemGroup>
+
 </Project>
