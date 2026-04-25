@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,7 +11,7 @@ namespace BookCafe.Domain.Repositories
     public interface IUserRepository
     {
         Task<User> GetUser(string  username);
-        Task<bool> AddUser(User  user);
-        Task<bool> SaveRefreshToken(User user);
+        void Add(User  user);
+        void Update(User user);
     }
 }

@@ -10,6 +10,6 @@ namespace BookCafe.Domain.Entities
         public DateTime? BirthDate { get; set; }
         public string? Nationality { get; set; }
 
-        public virtual ICollection<Book> Books { get; set; }
+        public virtual ICollection<Book> Books { get; set; }= new List<Book>();
     }
 }

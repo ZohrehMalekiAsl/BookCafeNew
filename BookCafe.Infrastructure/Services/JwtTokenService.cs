@@ -41,7 +41,7 @@ namespace BookCafe.Infrastructure.Services
       
             return Task.FromResult(jwt);
         }
-        public Task<RefreshToken> GenerateRefreshToken(int userId)
+        public Task<RefreshToken> GenerateRefreshToken(Guid userId)
         {
           
             var days = double.Parse(_appSetting.RefreshTokenDays);

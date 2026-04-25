@@ -20,7 +20,7 @@ namespace BookCafe.Infrastructure.Context
             builder.Entity<Book>();
             builder.Entity<Customer>();
             builder.Entity<Author>();
-            builder.Entity<User>().HasIndex(u => u.UserName).IsUnique(); 
+            builder.Entity<User>().HasIndex(u => u.UserName).IsUnique().HasFilter("[IsActive]=1"); 
             builder.Entity<RefreshToken>().HasIndex(u => u.Token).IsUnique(); 
             builder.ApplyConfigurationsFromAssembly(typeof(BookConfig).Assembly);
         }

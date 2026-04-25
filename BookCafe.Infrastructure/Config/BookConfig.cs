@@ -14,7 +14,6 @@ namespace BookCafe.Infrastructure.Config
         public void Configure(EntityTypeBuilder<Book> builder)
         {
             builder.Property(x=>x.Title).HasMaxLength(100);
-            
         }
     }
 }

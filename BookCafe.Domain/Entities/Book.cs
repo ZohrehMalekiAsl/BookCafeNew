@@ -13,6 +13,6 @@ namespace BookCafe.Domain.Entities
         public string Title { get; set; }
         public int PublishYear { get; set; }
         public decimal Price { get; set; }
-        public virtual ICollection<Author> Authors { get; set; }
+        public virtual ICollection<Author> Authors { get; set; } = new List<Author>();
     }
 }

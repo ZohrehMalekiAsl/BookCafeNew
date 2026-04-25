@@ -16,7 +16,8 @@ namespace BookCafe.Infrastructure.Config
             builder.Property(x => x.FirstName).HasMaxLength(100);
             builder.Property(x => x.LastName).HasMaxLength(100);
             builder.Property(x => x.Nationality).HasMaxLength(100);
-            builder.HasMany<Book>();  
+            builder.HasMany(b => b.Books)
+                   .WithMany(a => a.Authors);
         }
     }
 }

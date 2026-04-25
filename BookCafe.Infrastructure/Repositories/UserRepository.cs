@@ -17,22 +17,5 @@ namespace BookCafe.Infrastructure.Repositories
         {
             return await dbContext.User.FirstOrDefaultAsync(s=>s.UserName==username);
         }
-        public  async Task<bool> AddUser(User user)
-        {
-            dbContext.User.Add(user);
-            var result= await unitOfWork.AysncSave();
-            if (result == null)
-                return false;
-            return true;
-        }
-
-        public async Task<bool> SaveRefreshToken(User user)
-        {
-            dbContext.User.Update(user);
-            var result= await unitOfWork.AysncSave();
-            if(result==null)
-                return false;
-            return true;
-        }
     }
 }

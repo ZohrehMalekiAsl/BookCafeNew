@@ -2,6 +2,7 @@
 using BookCafe.Application.CQRS.Token.Commands;
 using BookCafe.Application.Dtos.Login;
 using BookCafe.Application.Interfaces.Infra;
+using BookCafe.Application.Repositories;
 using BookCafe.Domain.Entities;
 
 namespace BookCafe.Infrastructure.Services
@@ -10,11 +11,13 @@ namespace BookCafe.Infrastructure.Services
     {
         private readonly IUserService _userService;
         private readonly IJwtTokenService _jwtTokenService;
+        private readonly IRefreshTokenService _refreshTokenService;
 
-        public AuthService(IUserService userService, IJwtTokenService jwtTokenService)
+        public AuthService(IUserService userService, IJwtTokenService jwtTokenService, IRefreshTokenService refreshTokenService)
         {
             _userService = userService;
             _jwtTokenService = jwtTokenService;
+            _refreshTokenService = refreshTokenService;
         }
         public async Task<LoginResponseDto> IsAuthenticated(GenerateTokenCommand request)
         {
@@ -51,9 +54,11 @@ namespace BookCafe.Infrastructure.Services
                             Id = refToken.Result.Id,
                             Token=refToken.Result.Token,
                             IsRevoked = refToken.Result.IsRevoked,
-                            UserId = user.Id,                            
+                            UserId = user.Id,   
+                            TokenVersion=user.TokenVersion,
                     };
-                    var user2 = await _userService.SaveRefreshToken(user);
+                    
+                    await _refreshTokenService.AddRefreshToken(refreshToken);
                     var response = new LoginResponseDto
                     {
                         AccessToken = jwt.Result,

@@ -8,7 +8,10 @@ namespace BookCafe.Infrastructure.Config
     {
         public void Configure(EntityTypeBuilder<RefreshToken> builder)
         {
-            builder.HasOne<User>();
+            builder.Property(x => x.Token).HasMaxLength(450);
+            builder.HasOne(s=>s.user)
+                .WithMany(b=>b.RefreshTokens)
+                .HasForeignKey(a => a.UserId);
         }
     }
 }
