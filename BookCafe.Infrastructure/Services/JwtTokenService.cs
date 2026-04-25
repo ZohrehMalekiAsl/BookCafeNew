@@ -48,17 +48,41 @@ namespace BookCafe.Infrastructure.Services
 
             var randomBytes = RandomNumberGenerator.GetBytes(64);
             var token = Convert.ToBase64String(randomBytes);
-
+            var hashedToken = Convert.ToBase64String(HashRefreshToken(token));
             var refreshToken = new RefreshToken
             {
                 UserId = userId,
-                Token = token,
+                Token = hashedToken,
                 CreateAt = DateTime.UtcNow,
                 ExpiresAt = DateTime.UtcNow.AddDays(days),
                 IsRevoked = false
             };
             
             return Task.FromResult(refreshToken );
+        }
+        public static byte[] GenerateSalt()
+        {
+            var rng = new RNGCryptoServiceProvider();
+            var salt = new byte[16]; // 16 بایت معمولاً برای Salt کافی است
+            rng.GetBytes(salt);
+            return salt;
+        }
+
+        private static byte[] HashRefreshToken(string refreshToken)
+        {
+            if (string.IsNullOrEmpty(refreshToken))
+            {
+                throw new ArgumentNullException(nameof(refreshToken));
+            }
+
+            var salt = GenerateSalt();
+            var combined = Encoding.UTF8.GetBytes(refreshToken).Concat(salt).ToArray(); // ترکیب توکن و Salt
+
+            using (var sha256 = SHA256.Create())
+            {
+                var hashedToken = sha256.ComputeHash(combined);
+                return hashedToken;
+            }
         }
     }
 }

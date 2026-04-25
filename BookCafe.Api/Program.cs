@@ -1,6 +1,7 @@
 using BookCafe.Application.CQRS.Authors.Commands;
 using BookCafe.Application.Interfaces.Infra;
 using BookCafe.Application.Interfaces.Services;
+using BookCafe.Application.Repositories;
 using BookCafe.Application.Services;
 using BookCafe.Domain;
 using BookCafe.Domain.Entities;
@@ -50,6 +51,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IMediator, Mediator>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IAuthorService, AuthorService>();
+builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
+builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddScoped<IBookService, GetBookServices>();
 builder.Services.AddScoped<IBookService, SpecificBookServices>();
 //builder.Services.AddKeyedScoped<IBookService, SpecificBookServices>("A");

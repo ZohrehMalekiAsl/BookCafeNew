@@ -15,7 +15,7 @@ namespace BookCafe.Infrastructure.Repositories
     {
         public  async Task<User> GetUser(string username)
         {
-            return await dbContext.User.FirstOrDefaultAsync(s=>s.UserName==username);
+            return await dbContext.User.Where(x=>x.IsActive==1).FirstOrDefaultAsync(s => s.UserName == username);
         }
     }
 }
