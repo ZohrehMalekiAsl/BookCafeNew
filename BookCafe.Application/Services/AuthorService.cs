@@ -37,7 +37,7 @@ namespace BookCafe.Application.Services
      
             _repository.Add(author);
        
-            var result = await _unitOfWork.AysncSave();
+            var result = await _unitOfWork.SaveAysnc();
             var logData = new LogData<AddAuthorCommand,Guid>
             {
                 CorrelationId = author.Id.ToString(),
@@ -90,7 +90,7 @@ namespace BookCafe.Application.Services
                 Id = request.Id
             };
             _repository.Update(author);
-            var result = await _unitOfWork.AysncSave();
+            var result = await _unitOfWork.SaveAysnc();
 
             if (result != null)
                 return true;

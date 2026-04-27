@@ -18,15 +18,26 @@ namespace BookCafe.Infrastructure.Services
 
         public async Task<bool> AddRefreshToken(RefreshToken refreshToken)
         {
-            _repository.Add(refreshToken);
-            var result= await _unitOfWork.AysncSave();
-            if (result == null || result!=1)
+             await _unitOfWork.BeginTransaction();
+             var refreshTokens=_repository.GetTokenByUserId(refreshToken.UserId);
+            foreach (var token in refreshTokens.Result)
             {
-                return await Task.FromResult(false);
+                token.IsRevoked = true;
+                _repository.Update(token);
             }
-            else
+             _repository.Add(refreshToken);
+             try
+            { 
+                await _unitOfWork.CommitTransaction();
+                return await Task.FromResult(false);
+             }
+            catch (Exception ex) 
             {
-                return await Task.FromResult(true);
+                 return await Task.FromResult(true);
+             }
+            finally
+            {
+                _unitOfWork.RollbackTransaction();
             }
         }
 
@@ -43,7 +54,7 @@ namespace BookCafe.Infrastructure.Services
         {
             refreshToken.IsRevoked = true;
             _repository.Update(refreshToken);
-            await _unitOfWork.AysncSave();
+            await _unitOfWork.SaveAysnc();
         }
 
         public Task<bool> ValidateAsync(string token, RefreshToken refreshToken)

@@ -37,9 +37,10 @@ namespace BookCafe.Infrastructure.Services
             signingCredentials: credential
                 );
 
-            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-      
-            return Task.FromResult(jwt);
+            var plainJWT = new JwtSecurityTokenHandler().WriteToken(token);
+            var hashedJWT=Hash(plainJWT);
+            var strhashedJWT = Convert.ToBase64String(hashedJWT.Result);
+            return Task.FromResult(strhashedJWT);
         }
         public Task<RefreshToken> GenerateRefreshToken(Guid userId)
         {
@@ -48,11 +49,11 @@ namespace BookCafe.Infrastructure.Services
 
             var randomBytes = RandomNumberGenerator.GetBytes(64);
             var token = Convert.ToBase64String(randomBytes);
-            var hashedToken = Convert.ToBase64String(HashRefreshToken(token));
+            //var hashedToken = Convert.ToBase64String(Hash(token));
             var refreshToken = new RefreshToken
             {
                 UserId = userId,
-                Token = hashedToken,
+                Token = token,
                 CreateAt = DateTime.UtcNow,
                 ExpiresAt = DateTime.UtcNow.AddDays(days),
                 IsRevoked = false
@@ -60,7 +61,7 @@ namespace BookCafe.Infrastructure.Services
             
             return Task.FromResult(refreshToken );
         }
-        public static byte[] GenerateSalt()
+        private static byte[] GenerateSalt()
         {
             var rng = new RNGCryptoServiceProvider();
             var salt = new byte[16]; // 16 بایت معمولاً برای Salt کافی است
@@ -68,20 +69,20 @@ namespace BookCafe.Infrastructure.Services
             return salt;
         }
 
-        private static byte[] HashRefreshToken(string refreshToken)
+        public Task<byte[]> Hash(string input)
         {
-            if (string.IsNullOrEmpty(refreshToken))
+            if (string.IsNullOrEmpty(input))
             {
-                throw new ArgumentNullException(nameof(refreshToken));
+                throw new ArgumentNullException(nameof(input));
             }
 
             var salt = GenerateSalt();
-            var combined = Encoding.UTF8.GetBytes(refreshToken).Concat(salt).ToArray(); // ترکیب توکن و Salt
+            var combined = Encoding.UTF8.GetBytes(input).Concat(salt).ToArray(); // ترکیب توکن و Salt
 
             using (var sha256 = SHA256.Create())
             {
                 var hashedToken = sha256.ComputeHash(combined);
-                return hashedToken;
+                return Task.FromResult(hashedToken);
             }
         }
     }

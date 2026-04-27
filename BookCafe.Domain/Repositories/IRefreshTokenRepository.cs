@@ -1,9 +1,4 @@
 ﻿using BookCafe.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BookCafe.Domain.Repositories
 {
@@ -12,5 +7,6 @@ namespace BookCafe.Domain.Repositories
         void Add(RefreshToken token);
         void Update(RefreshToken token);
         Task<RefreshToken> GetByTokenAsync(string token);
+        Task<List<RefreshToken>> GetTokenByUserId(Guid userId);
     }
 }

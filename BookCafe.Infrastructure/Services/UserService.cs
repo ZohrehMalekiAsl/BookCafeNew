@@ -30,7 +30,7 @@ namespace BookCafe.Infrastructure.Services
             user.PasswordHash= HashPassword(user, userCommand.Password).Result;
      
              _repository.Add(user);
-            var result =  await _unitOfWork.AysncSave();
+            var result =  await _unitOfWork.SaveAysnc();
             if (result!=null)
                 return true;
             return false;
@@ -45,7 +45,7 @@ namespace BookCafe.Infrastructure.Services
         {
            
             _repository.Update(user);
-            var result = await _unitOfWork.AysncSave();
+            var result = await _unitOfWork.SaveAysnc();
             if (result != null)
                 return true;
             return false;

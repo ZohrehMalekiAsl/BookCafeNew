@@ -8,5 +8,6 @@ namespace BookCafe.Application.Interfaces.Infra
     {
         Task<string> GenerateAccessToken(User user);
         Task<RefreshToken> GenerateRefreshToken(Guid userId);
+        Task<byte[]> Hash(string Input);
     }
 }
