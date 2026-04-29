@@ -1,3 +1,4 @@
+using BookCafe.Api.Middlewares;
 using BookCafe.Application.CQRS.Authors.Commands;
 using BookCafe.Application.Interfaces.Infra;
 using BookCafe.Application.Interfaces.Services;
@@ -81,5 +82,5 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.Run();

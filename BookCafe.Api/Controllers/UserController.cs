@@ -26,10 +26,10 @@ namespace BookCafe.Api.Controllers
                 UserName = request.UserName,
             };
             var result = await _mediator.Send(user);
-            if (result != null)
-            {
-                return Ok(result);
-            }
+            //if (result != null)
+            //{
+            //    return Ok(result);
+            //}
             return BadRequest(result);
         }
     }

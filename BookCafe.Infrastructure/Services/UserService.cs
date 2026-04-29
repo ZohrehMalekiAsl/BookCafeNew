@@ -1,6 +1,8 @@
 ﻿using BookCafe.Application.CQRS.User.Commands;
 using BookCafe.Application.Interfaces.Infra;
+using BookCafe.Domain.BusinessExceptions;
 using BookCafe.Domain.Entities;
+using BookCafe.Domain.Enums;
 using BookCafe.Domain.Repositories;
 using Microsoft.AspNetCore.Identity;
 
@@ -21,19 +23,22 @@ namespace BookCafe.Infrastructure.Services
 
         public async Task<bool> AddUser(AddUserCommand userCommand)
         {
-            var user = new User
-            {
-                UserName = userCommand.UserName
-                //Password = userCommand.Password,
-                //Id=1
-            };
-            user.PasswordHash= HashPassword(user, userCommand.Password).Result;
+            string me = "";
+            var xx = ErrorMessages.GetMessage(BusinessErrorCode.BookNotFound, out me);
+            throw new BusinessExceptions(me, BusinessErrorCode.BookNotFound);
+            //var user = new User
+            //{
+            //    UserName = userCommand.UserName
+            //    //Password = userCommand.Password,
+            //    //Id=1
+            //};
+            //user.PasswordHash= HashPassword(user, userCommand.Password).Result;
      
-             _repository.Add(user);
-            var result =  await _unitOfWork.SaveAysnc();
-            if (result!=null)
-                return true;
-            return false;
+            // _repository.Add(user);
+            //var result =  await _unitOfWork.SaveAysnc();
+            //if (result!=null)
+            //    return true;
+            //return false;
         }
 
         public async Task<User> GetUserByUsername(string username)
