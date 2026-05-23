@@ -20,8 +20,6 @@ using Serilog.Formatting.Compact;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-
 builder.Host.UseSerilog();
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
@@ -45,6 +43,12 @@ builder.Services.AddDbContextPool<ApplicationDbContext>((sp, options) =>
            .UseLazyLoadingProxies();
 });
 
+//builder.Configuration.SetBasePath(builder.Environment.ContentRootPath).AddJsonFile("myappsettings.json", true, true);
+//var con = builder.Configuration;
+//MyAppSetting appSetting = new MyAppSetting();
+//builder.Configuration.Bind("MySettings", appSetting);
+//builder.Services.AddSingleton<MyAppSetting>(appSetting);
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
@@ -65,7 +69,6 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddSingleton<IAppSetting, AppSettingsProvider>();
 builder.Services.AddScoped(typeof(ILogService<>), typeof(LogService<>));
 builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("Settings"));
-
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssembly(typeof(AddAuthorCommand).Assembly));
 
 var app = builder.Build();

@@ -10,7 +10,7 @@ namespace BookCafe.Infrastructure
     public class AppSetting
     {
         public ConnectionStrings ConnectionStrings { get; set; }
-        public JwtSettings JwtSettings { get; set; }
+        public JwtSettings JwtSettings { get; set; } 
     }
 
     public class ConnectionStrings

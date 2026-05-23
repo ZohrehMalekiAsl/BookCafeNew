@@ -3,8 +3,10 @@ using BookCafe.Application.CQRS.Token.Commands;
 using BookCafe.Application.Dtos.Login;
 using BookCafe.Application.Interfaces.Infra;
 using BookCafe.Domain.Entities;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Runtime;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -15,11 +17,14 @@ namespace BookCafe.Infrastructure.Services
     {
   
         private readonly IAppSetting _appSetting;
+        //private readonly MyAppSetting _appSetting1;
+        //private readonly IConfiguration _conf;
 
-        public JwtTokenService(IAppSetting appSetting)
+        public JwtTokenService(IAppSetting appSetting/*, MyAppSetting appSetting1, IConfiguration conf*/)
         {
-        
             _appSetting = appSetting;
+            //_appSetting1 = appSetting1;
+            //_conf = conf;
         }
         public Task<string> GenerateAccessToken(User user)
         {
@@ -44,9 +49,18 @@ namespace BookCafe.Infrastructure.Services
         }
         public Task<RefreshToken> GenerateRefreshToken(Guid userId)
         {
-          
-            var days = double.Parse(_appSetting.RefreshTokenDays);
+            //double days = 0;
+            //try
+            //{
 
+            //    //days = double.Parse(_appSetting1.RefreshTokenDayss);//_appSetting.RefreshTokenDays);
+            //    days = double.Parse(_conf.GetSection("MySettings")["RefreshTokenDayss"]);
+            //}
+            //catch (Exception ex)
+            //{
+
+            //}
+            var days = double.Parse(_appSetting.RefreshTokenDays);
             var randomBytes = RandomNumberGenerator.GetBytes(64);
             var token = Convert.ToBase64String(randomBytes);
             //var hashedToken = Convert.ToBase64String(Hash(token));
